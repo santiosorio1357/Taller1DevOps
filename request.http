@@ -28,3 +28,31 @@ GET  http://localhost:3000/todo/65e537a1ff6e27e85b264e3f HTTP/1.1
 
 DELETE  http://localhost:3000/todo/65e537a1ff6e27e85b264e3f HTTP/1.1
 
+###
+---------------------------------user----------------------------------
+###
+POST http://localhost:3000/user HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "john_doe_1",
+    "email": "john@example.com",
+    "password": "securepassword"
+}
+
+###
+PUT http://localhost:3000/user/65e67e124ff12e200c8d8e70 HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "john_updated@example.com"
+}
+
+###
+GET http://localhost:3000/user HTTP/1.1
+
+###
+GET http://localhost:3000/user/65e537a1ff6e27e85b264e3f HTTP/1.1
+
+###
+DELETE http://localhost:3000/user/65e537a1ff6e27e85b264e3f HTTP/1.1
