@@ -31,10 +31,12 @@ jobs:
 
           coverage=$(cat ./coverage/lcov-report/index.html | grep -oP 'Statements.*?(\d+\.\d+)%</span>' | grep -oP '\d+\.\d+')
 
+          echo "Porcentaje de cobertura: $coverage%"
+
           if (( $(echo "$coverage > 40" | bc -l) )); then
-            echo "La cobertura de código es mayor al 40%. ($coverage%)"
+            echo "Aprobado: La cobertura de código es mayor al 40%."
           else
-            echo "Error: La cobertura es menor o igual al 40%.($coverage%)"
+            echo "Error: La cobertura es menor o igual al 40%."
             exit 1
           fi
           
