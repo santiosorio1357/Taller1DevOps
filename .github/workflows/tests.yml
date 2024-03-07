@@ -22,14 +22,18 @@ jobs:
         run: npm install --no-audit --no-fund --no-optional
 
       - name: Run Tests
-        run: npm test
+        run: npm test -- --coverage --silent
 
-      - name: Check Test Results
+      - name: Check Test Coverage
         run: |
-          npm install -g jest
-          jest --coverage --silent
-
-          coverage=$(cat ./coverage/lcov-report/index.html | grep -Eo "data-value=\"[0-9]+.[0-9]+\"" | head -n 1)
-          echo "La cobertura de código es mayor al 40%. ($coverage%)"
+          coverage=$(cat ./coverage/coverage-summary.json | jq -r ".total.lines.pct")
           
+          echo "La cobertura de código es mayor al 40%. ($coverage%)"
 
+          if (( $(echo "$coverage > 40" | bc -l) )); then
+            echo "Éxito: La cobertura es mayor al 40%."
+            exit 0
+          else
+            echo "Error: La cobertura es menor o igual al 40%."
+            exit 1
+          fi
