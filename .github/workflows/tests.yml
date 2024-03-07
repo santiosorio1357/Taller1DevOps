@@ -29,7 +29,7 @@ jobs:
           npm install -g jest
           jest --coverage --silent
 
-          coverage=$(cat ./coverage/lcov-report/index.html | grep -oP 'Statements.*?(\d+\.\d+)%</span>' | grep -oP '\d+\.\d+')
+          coverage=$(cat ./coverage/lcov-report/index.html | grep -oP 'Statements.*?(\d+\.\d+)%' | grep -oP '\d+\.\d+')
 
           echo "Porcentaje de cobertura: $coverage%"
 
@@ -39,5 +39,6 @@ jobs:
             echo "Error: La cobertura es menor o igual al 40%."
             exit 1
           fi
+          
           
 
