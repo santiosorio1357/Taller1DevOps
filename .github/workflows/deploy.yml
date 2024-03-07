@@ -27,8 +27,12 @@ jobs:
         run: npm test
 
       - name: Check coverage threshold
+        id: check-coverage
         if: steps.run-tests.outcome == 'success'
         run: npm run check-coverage-deploy
-      
 
-    
+      - name: Build and Push Docker Image
+        if: steps.check-coverage.outcome == 'success'
+        run: |
+          docker build -t your-docker-image-name .
+          
