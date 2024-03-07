@@ -31,8 +31,14 @@ jobs:
         if: steps.run-tests.outcome == 'success'
         run: npm run check-coverage-deploy
 
+      - name: Login to Docker Hub
+        if: steps.check-coverage.outcome == 'success'
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build and Push Docker Image
         if: steps.check-coverage.outcome == 'success'
         run: |
-          docker build -t your-docker-image-name .
+          docker build -t santiosorio1357/api_devops:latest .
+          docker push santiosorio1357/api_devops:latest
           
