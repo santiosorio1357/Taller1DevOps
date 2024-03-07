@@ -28,7 +28,9 @@ jobs:
         run: |
           npm install -g jest
           jest --coverage --silent
+
           coverage=$(cat ./coverage/lcov-report/index.html | grep -Eo "data-value=\"[0-9]+.[0-9]+\"" | cut -d'"' -f2)
+
           if (( $(echo "'$coverage' >= 40" | bc -l) )); then
             echo "La cobertura de código es mayor al 40%."
           else
