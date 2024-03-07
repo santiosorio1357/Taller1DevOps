@@ -29,7 +29,6 @@ jobs:
           npm install -g jest
           jest --coverage --silent
           
-          
           coverage=$(grep -oP 'All files</h1>\s*<div class='\''fl pad1y space-right2'\''>\s*<span class='\''strong'\''>\K\d+\.\d+' ./coverage/lcov-report/index.html)
 
           echo "Cobertura: $coverage%"
