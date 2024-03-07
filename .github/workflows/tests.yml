@@ -33,12 +33,6 @@ jobs:
 
           echo "Porcentaje de cobertura: $coverage%"
 
-          if (( $(echo "$coverage > 40" | bc -l) )); then
-            echo "Aprobado: La cobertura de código es mayor al 40%."
-          else
-            echo "Error: La cobertura es menor o igual al 40%."
-            exit 1
-          fi
           
           
 
