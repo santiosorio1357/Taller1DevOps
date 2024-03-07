@@ -23,16 +23,17 @@ jobs:
 
       - name: Run Tests
         run: npm test
-
+        
       - name: Check Test Results
         run: |
           npm install -g jest
           jest --coverage --silent
-          coverage=$(cat ./coverage/lcov-report/index.html | grep -Eo "data-value=\"[0-9]+.[0-9]+\"" | cut -d'"' -f2)
-
+          coverage=$(cat ./coverage/lcov-report/index.html | grep -Eo "strong.*pct" | grep -Eo "[0-9]+\.[0-9]+")
+          
           if (( $(echo "$coverage >= 40" | bc -l) )); then
             echo "Code coverage is greater than or equal to 40%."
           else
             echo "Code coverage is less than 40%. Exiting with failure."
             exit 1
           fi
+
