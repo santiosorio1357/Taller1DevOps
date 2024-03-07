@@ -1,24 +1,25 @@
-# Utiliza la imagen oficial de Node.js 16
+# Use the official Node.js 16 image
 FROM node:16
 
-# Establece el directorio de trabajo en /app
+# Set the working directory in the container
 WORKDIR /app
 
-# Copia los archivos package.json y package-lock.json al contenedor
+# Copy the package.json and package-lock.json files to the container
 COPY package.json .
 COPY package-lock.json .
 
-# Instala las dependencias del proyecto
+# Install the project dependencies
 RUN npm install
 
-# Copia el código fuente del proyecto al contenedor
-COPY src .
+# Copy the source code and configuration files to the container
+COPY tsconfig.json .
+COPY src/ ./src/
 
-# Construye la aplicación
+# Build the application
 RUN npm run build
 
-# Expone el puerto 3000 en el contenedor
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Comando para ejecutar la aplicación
+# Command to run the application
 CMD ["npm", "start"]
