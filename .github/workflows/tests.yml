@@ -32,9 +32,9 @@ jobs:
           coverage=$(cat ./coverage/lcov-report/index.html | grep -Eo "data-value=\"[0-9]+.[0-9]+\"" | cut -d'"' -f2)
 
           if (( $(echo "'$coverage' >= 40" | bc -l) )); then
-            echo "La cobertura de código es mayor al 40%."
+            echo "La cobertura de código es mayor al 40%. ($coverage%)"
           else
-            echo "La cobertura de código es menor al 40%. Saliendo con error."
+            echo "La cobertura de código es menor al 40%. Saliendo con error. ($coverage%)"
             exit 1
           fi
 
