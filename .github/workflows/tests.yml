@@ -24,20 +24,8 @@ jobs:
       - name: Run Tests
         run: npm test
 
-      - name: Check Test Results
-        run: |
-          npm install -g jest
-          jest --coverage --silent
+      - name: Check coverage threshold
+        run: npm run check-coverage
+
           
-          coverage=$(grep -oP 'All files</h1>\s*<div class='\''fl pad1y space-right2'\''>\s*<span class='\''strong'\''>\K\d+\.\d+' ./coverage/lcov-report/index.html)
-
-          echo "Cobertura: $coverage%"
-
-          if (( $(echo "$coverage > 40" | bc -l) )); then
-            echo "La cobertura es mayor al 40%, todo está bien."
-          else
-            echo "Error: La cobertura es menor o igual al 40%."
-            exit 1  
-          fi
-
-          echo "::set-output name=coverage::$coverage"
+          
