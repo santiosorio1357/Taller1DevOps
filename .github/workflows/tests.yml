@@ -29,6 +29,17 @@ jobs:
         if: steps.run-tests.outcome == 'success'
         run: npm run check-coverage
 
+      - name: Login to Azure Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: wwebe.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME_TEST }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD_TEST }}
+      - name: Push to Azure Registry
+        run: |
+          docker build . -t wwebe.azurecr.io/wwebe:latest
+          docker push wwebe.azurecr.io/wwebe:latest
+
   stop-on-failure:
     runs-on: ubuntu-latest
     needs: test

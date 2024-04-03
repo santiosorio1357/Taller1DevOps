@@ -31,13 +31,13 @@ jobs:
         if: steps.run-tests.outcome == 'success'
         run: npm run check-coverage-deploy
 
-      - name: Login to Azure Registry
-        uses: azure/docker-login@v1
-        with:
-          login-server: wwwutso.azurecr.io
-          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
-      - name: Push to Azure Registry
-        run: |
-          docker build . -t wwwutso.azurecr.io/wwwutso:latest
-          docker push wwwutso.azurecr.io/wwwutso:latest
+      #- name: Login to Azure Registry
+      #  uses: azure/docker-login@v1
+      #  with:
+      #    login-server: wwwutso.azurecr.io
+      #    username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+      #    password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+      #- name: Push to Azure Registry
+      #  run: |
+      #    docker build . -t wwwutso.azurecr.io/wwwutso:latest
+      #    docker push wwwutso.azurecr.io/wwwutso:latest
