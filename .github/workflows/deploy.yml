@@ -6,6 +6,11 @@ on:
     types:
       - completed
 
+env:
+  DESIRED_ENVIRONMENT: production
+  TEST_ENVIRONMENT: test
+  PRODUCTION_ENVIRONMENT: production
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -31,13 +36,30 @@ jobs:
         if: steps.run-tests.outcome == 'success'
         run: npm run check-coverage-deploy
 
-      #- name: Login to Azure Registry
-      #  uses: azure/docker-login@v1
-      #  with:
-      #    login-server: wwwutso.azurecr.io
-      #    username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-      #    password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
-      #- name: Push to Azure Registry
-      #  run: |
-      #    docker build . -t wwwutso.azurecr.io/wwwutso:latest
-      #    docker push wwwutso.azurecr.io/wwwutso:latest
+      - name: Login to Test Azure Registry
+        if: ${{ env.DESIRED_ENVIRONMENT == env.TEST_ENVIRONMENT }}
+        uses: azure/docker-login@v1
+        with:
+          login-server: test2dv.azurecr.io
+          username: ${{ secrets.TEST_USERNAME }}
+          password: ${{ secrets.TEST_PASSWORD }}
+
+      - name: Push to Test Azure Registry
+        if: ${{ env.DESIRED_ENVIRONMENT == env.TEST_ENVIRONMENT }}
+        run: |
+          docker build . -t test2dv.azurecr.io/test:latest
+          docker push test2dv.azurecr.io/test:latest
+
+      - name: Login to Production Azure Registry
+        if: ${{ env.DESIRED_ENVIRONMENT == env.PRODUCTION_ENVIRONMENT }}
+        uses: azure/docker-login@v1
+        with:
+          login-server: production2dv.azurecr.io
+          username: ${{ secrets.PRODUCTION_USERNAME }}
+          password: ${{ secrets.PRODUCTION_PASSWORD }}
+
+      - name: Push to Production Azure Registry
+        if: ${{ env.DESIRED_ENVIRONMENT == env.PRODUCTION_ENVIRONMENT }}
+        run: |
+          docker build . -t production2dv.azurecr.io/prod:latest
+          docker push production2dv.azurecr.io/prod:latest
