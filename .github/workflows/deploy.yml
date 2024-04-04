@@ -7,7 +7,7 @@ on:
       - completed
 
 env:
-  DESIRED_ENVIRONMENT: test
+  DESIRED_ENVIRONMENT: production
   TEST_ENVIRONMENT: test
   PRODUCTION_ENVIRONMENT: production
 
