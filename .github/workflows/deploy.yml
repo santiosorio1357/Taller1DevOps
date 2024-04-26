@@ -6,6 +6,7 @@ on:
     types:
       - completed
 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -36,7 +37,7 @@ jobs:
         if: steps.check-coverage.outcome == 'success'
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          
+
       - name: Build and Push Docker Image
         if: steps.check-coverage.outcome == 'success'
         run: |
