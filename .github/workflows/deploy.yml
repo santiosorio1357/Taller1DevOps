@@ -41,6 +41,5 @@ jobs:
       - name: Build and Push Docker Image
         if: steps.check-coverage.outcome == 'success'
         run: |
-          docker build -t your-docker-image-name .
           docker build -t santiosorio1357/api_devops:latest .
           docker push santiosorio1357/api_devops:latest
