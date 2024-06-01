@@ -27,6 +27,10 @@ resource "google_cloud_run_service_iam_member" "run_all_users" {
   location = google_cloud_run_service.run_service.location
   role     = "roles/run.invoker"
   member   = "allUsers"
+
+  depends_on = [
+    google_cloud_run_service.run_service
+  ]
 }
 
 # Crear el servicio de Cloud Run para la API de NestJS
