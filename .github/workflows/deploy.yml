@@ -5,12 +5,14 @@ on:
     workflows: ["Tests"]
     types:
       - completed
-
+permissions:
+  contents: read
+  issues: write
+  
 jobs:
-
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -32,13 +34,43 @@ jobs:
         if: steps.run-tests.outcome == 'success'
         run: npm run check-coverage-deploy
 
-      - name: Login to Docker Hub
-        if: steps.check-coverage.outcome == 'success'
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - uses: actions/checkout@v4
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with: 
+          credentials_json: ${{ secrets.GOOGLE_AUTH_KEY }}
 
-      - name: Build and Push Docker Image
-        if: steps.check-coverage.outcome == 'success'
+      - uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: ">= 363.0.0"
+
+      - name: Build
+        run: gcloud builds submit --tag gcr.io/taller4sf/nestjs-api:latest
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+            terraform_version: 1.5.7
+
+      - name: Terraform init and validate
         run: |
-          docker build -t santiosorio1357/api_devops:latest .
-          docker push santiosorio1357/api_devops:latest
+          terraform init
+
+      - name: Terraform plan
+        run: |
+          terraform plan
+
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: santiosorio1357,federico29mg
+          minimum-approvals: 1
+          issue-title: "Deploying with Terraform to GCP"
+          issue-body: "Review the terraform plan, then approve or deny the deployment to GCP."
+          exclude-workflow-initiator-as-approver: false
+
+      - name: Terraform apply
+        run: |
+          terraform apply -auto-approve
+
+      
