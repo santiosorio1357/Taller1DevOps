@@ -11,7 +11,8 @@ provider "google" {
   project = "taller4sf"
 }
 
-resource "google_compute_network" "vpc_network" {
+# Referencia a la red VPC existente
+data "google_compute_network" "vpc_network" {
   name = "terraform-network"
 }
 
@@ -27,21 +28,17 @@ resource "google_cloud_run_service_iam_member" "run_all_users" {
   location = google_cloud_run_service.run_service.location
   role     = "roles/run.invoker"
   member   = "allUsers"
-
-  depends_on = [
-    google_cloud_run_service.run_service
-  ]
 }
 
 # Crear el servicio de Cloud Run para la API de NestJS
 resource "google_cloud_run_service" "run_service" {
   name     = "nestjs-api"
-  location = "us-east1" # Ajusta la región según tu preferencia
+  location = "us-east5" # Ajusta la región según tu preferencia
 
   template {
     spec {
       containers {
-        image = "gcr.io/taller4sf/nestjs-api:latest" 
+        image = "gcr.io/taller4sf/nestjs-api:latest"
       }
     }
   }
@@ -59,3 +56,4 @@ resource "google_cloud_run_service" "run_service" {
 output "service_url" {
   value = google_cloud_run_service.run_service.status[0].url
 }
+
