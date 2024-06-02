@@ -11,11 +11,6 @@ provider "google" {
   project = "taller4sf"
 }
 
-# Referencia a la red VPC existente
-data "google_compute_network" "vpc_network" {
-  name = "terraform-network"
-}
-
 # Habilita la API de Cloud Run
 resource "google_project_service" "run_api" {
   service = "run.googleapis.com"
