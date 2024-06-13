@@ -1,0 +1,58 @@
+{
+    "version": "1.0.0",
+    "title": "Simular caída de la API",
+    "description": "Un experimento para simular la caída de la API y verificar su recuperación",
+    "steady-state-hypothesis": {
+      "title": "La API debería estar disponible",
+      "probes": [
+        {
+          "type": "probe",
+          "name": "verificar que la API responde 200",
+          "tolerance": 200,
+          "provider": {
+            "type": "http",
+            "timeout": 3,
+            "verify_tls": false,
+            "url": "http://localhost:8080",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "type": "action",
+        "name": "detener el servidor de la API",
+        "provider": {
+          "type": "process",
+          "path": "taskkill",
+          "arguments": ["/F", "/IM", "node.exe"]
+        }
+      }
+    ],
+    "rollbacks": [
+      {
+        "type": "action",
+        "name": "reiniciar el servidor de la API",
+        "provider": {
+          "type": "process",
+          "path": "cmd",
+          "arguments": ["/c", "start npm start"],
+          "env": {
+            "PORT": "8080"
+          }
+        }
+      },
+      {
+        "type": "action",
+        "name": "esperar 4 segundos para que el servidor se inicie",
+        "provider": {
+          "type": "python",
+          "module": "wait",
+          "func": "wait",
+          "arguments": [4]
+        }
+      }
+    ]
+  }
+  

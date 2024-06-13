@@ -1,0 +1,229 @@
+{
+  "chaoslib-version": "1.43.2",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "node": "DESKTOP-8S2QHSA",
+  "experiment": {
+    "version": "1.0.0",
+    "title": "Prueba de Concepto: Ingeniería del Caos en API REST",
+    "description": "Este experimento tiene como objetivo simular una falla controlada en una API REST y verificar su recuperación posteriormente.",
+    "steady-state-hypothesis": {
+      "title": "La API REST debería estar disponible y responder correctamente.",
+      "probes": [
+        {
+          "type": "probe",
+          "name": "verificar que la API responde 200",
+          "tolerance": 200,
+          "provider": {
+            "type": "http",
+            "timeout": 3,
+            "verify_tls": false,
+            "url": "http://localhost:8080",
+            "method": "GET"
+          }
+        }
+      ]
+    },
+    "method": [
+      {
+        "type": "action",
+        "name": "simular caída del servicio",
+        "provider": {
+          "type": "http",
+          "url": "http://localhost:8080/simulate-crash",
+          "method": "POST"
+        }
+      },
+      {
+        "type": "action",
+        "name": "esperar 10 segundos para verificar la recuperación",
+        "provider": {
+          "type": "http",
+          "url": "http://localhost:8080/wait",
+          "method": "GET"
+        }
+      }
+    ],
+    "rollbacks": [
+      {
+        "type": "action",
+        "name": "reiniciar la API",
+        "provider": {
+          "type": "http",
+          "url": "http://localhost:8080/restart",
+          "method": "POST"
+        }
+      }
+    ],
+    "dry": null
+  },
+  "start": "2024-06-13T01:44:26.491114+00:00",
+  "status": "completed",
+  "deviated": false,
+  "steady_states": {
+    "before": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "type": "probe",
+            "name": "verificar que la API responde 200",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "timeout": 3,
+              "verify_tls": false,
+              "url": "http://localhost:8080",
+              "method": "GET"
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "X-Powered-By": "Express",
+              "Content-Type": "text/html; charset=utf-8",
+              "Content-Length": "12",
+              "ETag": "W/\"c-Lve95gjOVATpfV8EL5X4nxwjKHE\"",
+              "Date": "Thu, 13 Jun 2024 01:44:26 GMT",
+              "Connection": "keep-alive",
+              "Keep-Alive": "timeout=5"
+            },
+            "body": "Hello World!"
+          },
+          "start": "2024-06-13T01:44:26.493112+00:00",
+          "status": "succeeded",
+          "end": "2024-06-13T01:44:26.527226+00:00",
+          "duration": 0.034114,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "after": {
+      "steady_state_met": true,
+      "probes": [
+        {
+          "activity": {
+            "type": "probe",
+            "name": "verificar que la API responde 200",
+            "tolerance": 200,
+            "provider": {
+              "type": "http",
+              "timeout": 3,
+              "verify_tls": false,
+              "url": "http://localhost:8080",
+              "method": "GET"
+            }
+          },
+          "output": {
+            "status": 200,
+            "headers": {
+              "X-Powered-By": "Express",
+              "Content-Type": "text/html; charset=utf-8",
+              "Content-Length": "12",
+              "ETag": "W/\"c-Lve95gjOVATpfV8EL5X4nxwjKHE\"",
+              "Date": "Thu, 13 Jun 2024 01:44:26 GMT",
+              "Connection": "keep-alive",
+              "Keep-Alive": "timeout=5"
+            },
+            "body": "Hello World!"
+          },
+          "start": "2024-06-13T01:44:26.545848+00:00",
+          "status": "succeeded",
+          "end": "2024-06-13T01:44:26.566906+00:00",
+          "duration": 0.021058,
+          "tolerance_met": true
+        }
+      ]
+    },
+    "during": []
+  },
+  "run": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "simular caída del servicio",
+        "provider": {
+          "type": "http",
+          "url": "http://localhost:8080/simulate-crash",
+          "method": "POST"
+        }
+      },
+      "output": {
+        "status": 404,
+        "headers": {
+          "X-Powered-By": "Express",
+          "Content-Type": "application/json; charset=utf-8",
+          "Content-Length": "78",
+          "ETag": "W/\"4e-LT9EeCo7m5mY1VK7vdEF/SHIkWw\"",
+          "Date": "Thu, 13 Jun 2024 01:44:26 GMT",
+          "Connection": "keep-alive",
+          "Keep-Alive": "timeout=5"
+        },
+        "body": "{\"message\":\"Cannot POST /simulate-crash\",\"error\":\"Not Found\",\"statusCode\":404}"
+      },
+      "start": "2024-06-13T01:44:26.530782+00:00",
+      "status": "succeeded",
+      "end": "2024-06-13T01:44:26.536762+00:00",
+      "duration": 0.00598
+    },
+    {
+      "activity": {
+        "type": "action",
+        "name": "esperar 10 segundos para verificar la recuperación",
+        "provider": {
+          "type": "http",
+          "url": "http://localhost:8080/wait",
+          "method": "GET"
+        }
+      },
+      "output": {
+        "status": 404,
+        "headers": {
+          "X-Powered-By": "Express",
+          "Content-Type": "application/json; charset=utf-8",
+          "Content-Length": "67",
+          "ETag": "W/\"43-7hxyA5WwiYCvXEXDntzwjJWMrks\"",
+          "Date": "Thu, 13 Jun 2024 01:44:26 GMT",
+          "Connection": "keep-alive",
+          "Keep-Alive": "timeout=5"
+        },
+        "body": "{\"message\":\"Cannot GET /wait\",\"error\":\"Not Found\",\"statusCode\":404}"
+      },
+      "start": "2024-06-13T01:44:26.537761+00:00",
+      "status": "succeeded",
+      "end": "2024-06-13T01:44:26.543762+00:00",
+      "duration": 0.006001
+    }
+  ],
+  "rollbacks": [
+    {
+      "activity": {
+        "type": "action",
+        "name": "reiniciar la API",
+        "provider": {
+          "type": "http",
+          "url": "http://localhost:8080/restart",
+          "method": "POST"
+        }
+      },
+      "output": {
+        "status": 404,
+        "headers": {
+          "X-Powered-By": "Express",
+          "Content-Type": "application/json; charset=utf-8",
+          "Content-Length": "71",
+          "ETag": "W/\"47-uXh+8+kfPJ3t/4S8cP/GFVoVPyU\"",
+          "Date": "Thu, 13 Jun 2024 01:44:26 GMT",
+          "Connection": "keep-alive",
+          "Keep-Alive": "timeout=5"
+        },
+        "body": "{\"message\":\"Cannot POST /restart\",\"error\":\"Not Found\",\"statusCode\":404}"
+      },
+      "start": "2024-06-13T01:44:26.570906+00:00",
+      "status": "succeeded",
+      "end": "2024-06-13T01:44:26.577117+00:00",
+      "duration": 0.006211
+    }
+  ],
+  "end": "2024-06-13T01:44:26.577117+00:00",
+  "duration": 0.08600282669067383
+}

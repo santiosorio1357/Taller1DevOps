@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "title": "Prueba de Concepto: Ingeniería del Caos en API REST",
+  "description": "Este experimento tiene como objetivo simular una falla controlada en una API y verificar su recuperación posteriormente.",
+  "steady-state-hypothesis": {
+    "title": "La API REST debería estar disponible y responder correctamente.",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "verificar que la API responde 200",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "timeout": 3,
+          "verify_tls": false,
+          "url": "http://localhost:8080",
+          "method": "GET"
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "type": "action",
+      "name": "simular caída del servicio",
+      "provider": {
+        "type": "http",
+        "url": "http://localhost:8080/simulate-crash",
+        "method": "POST"
+      }
+    },
+    {
+      "type": "action",
+      "name": "esperar 10 segundos para verificar la recuperación",
+      "provider": {
+        "type": "http",
+        "url": "http://localhost:8080/wait",
+        "method": "GET"
+      }
+    }
+  ],
+  "rollbacks": [
+    {
+      "type": "action",
+      "name": "reiniciar la API",
+      "provider": {
+        "type": "http",
+        "url": "http://localhost:8080/restart",
+        "method": "POST"
+      }
+    }
+  ]
+}
